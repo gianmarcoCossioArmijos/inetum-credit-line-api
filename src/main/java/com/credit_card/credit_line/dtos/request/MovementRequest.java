@@ -6,13 +6,9 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import java.util.Date;
 
 public record MovementRequest(
 
-    @NotNull(message = "Movement ID should not be null")
-    @NumberFormat()
-    int movementId,
     @NotNull(message = "Operation amount should not be null")
     @Positive(message = "Operation amount should be a positive number")
     @NumberFormat(style = NumberFormat.Style.NUMBER)

@@ -34,6 +34,10 @@ public class Movement {
     private int movementIdCode;
     @Column(name = "operation_amount")
     private double movementOperationAmount;
+    @Column(name = "exchanged_amount")
+    private double movementExchangedAmount;
+    @Column(name = "exchange_rate")
+    private double movementExchangedRate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "creadtedAt")
     private LocalDateTime movementDate;
@@ -43,6 +47,8 @@ public class Movement {
     private String movementOperationtDescription;
     @Column(name = "operation_currency")
     private String movementOperationCurrency;
+    @Column(name = "exchange_currency")
+    private String movementExchangedCurrency;
     @Column(name = "origin")
     private String movementOrigin;
     @Column(name = "channel")

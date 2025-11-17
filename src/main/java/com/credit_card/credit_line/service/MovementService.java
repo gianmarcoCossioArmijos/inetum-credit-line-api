@@ -30,36 +30,42 @@ public class MovementService {
         final Double totalAmount = request.operationAmount();
         final String operationCurrency = request.operationCurrency();
         final String operationType = request.operationtype();
+        final String operationDescription = request.operationtDescription();
+        LocalDateTime date = LocalDateTime.now();
 
         // credit line extrernal api validation available amount and update
         validateAvailableAmount(totalAmount, creditLineId);
         CredtLineApiResponse updatedAmount = updateavailableAmount(operationType, totalAmount, operationCurrency, creditLineId);
 
-        // movement entity setup and persistenc
-        LocalDateTime date = LocalDateTime.now();
-        Movement movement = new Movement();
-        movement.setMovementOperationAmount(request.operationAmount());
-        movement.setMovementDate(date);
-        movement.setMovementOperationtype(request.operationtype());
-        movement.setMovementOperationtDescription(request.operationtDescription());
-        movement.setMovementOperationCurrency(request.operationCurrency());
-        movement.setMovementOrigin(request.origin());
-        movement.setMovementChannel(request.channel());
-        movement.setMovementCreditLineId(request.creditLineId());
+        // movement entity setup and persistence
+        Movement movement = Movement.builder()
+            .movementOperationAmount(totalAmount)
+            .movementExchangedAmount(updatedAmount.getExchangedAmount())
+            .movementExchangedRate(updatedAmount.getExchangeRate())
+            .movementDate(date)
+            .movementOperationtype(operationType)
+            .movementOperationtDescription(operationDescription)
+            .movementOperationCurrency(operationCurrency)
+            .movementExchangedCurrency(updatedAmount.getCreditLineCurrency())
+            .movementOrigin(request.origin())
+            .movementChannel(request.channel())
+            .movementCreditLineId(creditLineId)
+            .build();
         var savedMovement = repository.save(movement);
         var response = mapper.toResponse(savedMovement);
 
         // returning response
         Map<String, Object> responseObject = new HashMap<>();
         responseObject.put("responseMessage", "Movement succesfuly registered");
+        responseObject.put("responseCreditAmount", updatedAmount.getCreditLine());
+        responseObject.put("responseCurrentAmount", updatedAmount.getAvailableAmount());
         responseObject.put("response", response);
-        responseObject.put("responseAvailableAmount", updatedAmount);
         return responseObject;
     }
 
     public void validateAvailableAmount(Double totalAmount, int creditLineId){
         var apiResponse = apiService.creditLineAvailableAmount(creditLineId);
-        if (apiResponse.getAvailable() < totalAmount) {
+        if (apiResponse.getAvailableAmount() < totalAmount) {
             throw new CreditLineInsufficientFundsException("Insufficient funds for operation");
         }
     }
