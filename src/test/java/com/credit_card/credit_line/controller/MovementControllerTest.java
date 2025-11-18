@@ -69,7 +69,8 @@ public class MovementControllerTest {
         responseObject.put("response", response);
 
         Mockito.when(service.createMovement(Mockito.any(MovementRequest.class))).thenReturn(responseObject);    
-        mvc.perform(post("/api/v1/movement/create").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(request)))
+        mvc.perform(post("/api/v1/movement/create").contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(request)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.responseMessage").value("Movement succesfuly registered"))
             .andExpect(jsonPath("$.responseCreditAmount").value(1000.0))
@@ -105,7 +106,8 @@ public class MovementControllerTest {
         result.add(response);
 
         Mockito.when(service.getMovementsByType(creditLinId, operationType)).thenReturn(result);    
-        mvc.perform(get("/api/v1/movement/type-report/{creditLineId}", creditLinId).contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(get("/api/v1/movement/type-report/{creditLineId}", creditLinId).contentType(MediaType.APPLICATION_JSON)
+            .content(json))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].movementId").value(1));
         Mockito.verify(service, times(1)).getMovementsByType(creditLinId, operationType);

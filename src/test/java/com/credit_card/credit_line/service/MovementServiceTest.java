@@ -1,11 +1,8 @@
 package com.credit_card.credit_line.service;
 
-import static org.mockito.ArgumentMatchers.any;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -97,6 +94,7 @@ public class MovementServiceTest {
                 "FALABELLA RETAIL S.A.C.",
                 "ECOMMERCE",
                 1);
+                
         Mockito.when(mapper.toResponse(savedMovement)).thenReturn(movementResponse);
         Map<String, Object> result = service.createMovement(request);
 

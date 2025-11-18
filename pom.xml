@@ -77,6 +77,12 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+             <version>4.0.0.4121</version>
+        </dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -98,6 +104,17 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.11</version>
+
+				 <configuration>
+                    <excludes>
+                        <!-- jacoco exclude -->
+                        <exclude>com/credit_line/credit_line/dtos/**</exclude>
+                        <exclude>com/credit_line/credit_line/entity/**</exclude>
+                        <exclude>**/*Application.class</exclude>
+                        <exclude>**/*Config.class</exclude>
+                    </excludes>
+                </configuration>
+
 				<executions>
 					<execution>
 						<goals>
@@ -107,6 +124,7 @@
 
 					<execution>
 					<id>report</id>
+
 					<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
